@@ -229,7 +229,7 @@ lib.callback.register('storage:getUnitAccesses', function(source, unitId)
     
     for _, access in ipairs(playerRentals[identifier].accesses) do
         if access.unitId == unitId then
-            local ownerData = GetPlayerByIdentifier(access.ownerIdentifier)
+            local ownerData = GetPlayerFromIdentifier(access.ownerIdentifier)
             local ownerName = ownerData and GetFullName(ownerData.PlayerData.source) or "Unknown"
             
             table.insert(storages, {
@@ -489,7 +489,7 @@ lib.callback.register('storage:getCollaborators', function(source, unitId)
     if unitRentals[unitId] and unitRentals[unitId][identifier] then
         local unitRental = unitRentals[unitId][identifier]
         
-        local ownerData = GetPlayerByIdentifier(identifier)
+        local ownerData = GetPlayerFromIdentifier(identifier)
         local ownerName = ownerData and GetFullName(ownerData.PlayerData.source) or "Unknown"
 
         table.insert(collaborators, {
@@ -501,7 +501,7 @@ lib.callback.register('storage:getCollaborators', function(source, unitId)
 
         if unitRental.lockerData.collaborators then
             for _, collaborator in pairs(unitRental.lockerData.collaborators) do
-                local playerData = GetPlayerByIdentifier(collaborator.identifier)
+                local playerData = GetPlayerFromIdentifier(collaborator.identifier)
                 local name = playerData and GetFullName(playerData.PlayerData.source) or "Unknown"
 
                 table.insert(collaborators, {
@@ -1105,7 +1105,7 @@ CreateThread(function()
                                 
                                 UpdateLockerData(unitId, ownerIdentifier, { nextPaymentDue = newNextPayment })
                                 
-                                local ownerPlayer = GetPlayerByIdentifier(ownerIdentifier)
+                                local ownerPlayer = GetPlayerFromIdentifier(ownerIdentifier)
                                 if ownerPlayer then
                                     TriggerClientEvent('storage:autoRenewalSuccess', ownerPlayer.PlayerData.source, {
                                         unitId = unitId,
@@ -1119,7 +1119,7 @@ CreateThread(function()
                                 local graceEndTime = currentTime + Config.Rental.paymentGracePeriod
                                 UpdateLockerData(unitId, ownerIdentifier, { paymentGraceEnds = graceEndTime })
                                 
-                                local ownerPlayer = GetPlayerByIdentifier(ownerIdentifier)
+                                local ownerPlayer = GetPlayerFromIdentifier(ownerIdentifier)
                                 if ownerPlayer then
                                     TriggerClientEvent('storage:autoRenewalFailed', ownerPlayer.PlayerData.source, {
                                         unitId = unitId,
